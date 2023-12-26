@@ -1,0 +1,62 @@
+{% extends "auctions/layout.html" %}
+{% load humanize %}
+{% block body%}
+
+    <div class="container m-0">
+        <img src="{{listing.image}}" alt="" class="img-fluid pb-5" style="height: 20rem;">
+        {% if lister %}
+            <a name="" id="" class="btn btn-danger float-end" href="{% url 'closeListing' listing.id %}" role="button">Close Auction</a>
+        {% endif %}
+        {% autoescape off %}
+            <h5 class="text-info">{{listing.description|linebreaks}}</h5>
+        {% endautoescape%}
+        <h2><span class="text-primary">Start Bid </span>${{listing.start_bid|floatformat:2|intcomma }}</h2>
+
+        {% if bid %}
+            <h2><span class="text-primary">Current Bid </span>${{bid.amount|floatformat:2|intcomma }}</h2>
+        {% endif %}
+
+        <form action="{% url 'bids' listing.title %}" method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="number" class="form-control" placeholder="Bid" name="bid">
+                <span class="mt-3 text-primary">Note that bid must be > starting bid or the current bids</span>
+            </div>
+
+            <input type="submit" value="Place Bid" class="btn btn-primary">
+        </form>
+
+        <div class="mt-4">
+            <h2 class="">Details</h2>
+            <ul class="list-group">
+                <li class="list-inline-item">Listed by {{listing.user}}</li>
+                <li class="list-inline-item">Category: {{listing.category}}</li>
+            </ul>
+            {% if not listing_exist %}
+                <a name="" id="" class="btn btn-primary" href="{% url 'addToWatchlist' listing.title %}" role="button">Add To Watchlist</a>
+            {% endif %}
+        </div>
+        
+        {% for comment in comments %}
+            <div class="mt-4">
+                <h2 class="">Comments</h2>
+                <div class="d-flex border border-info p-3">
+                    <h3 class="text-primary">{{comment.user}}</h3>
+                    <p class="pl-5 pt-2 text-info-emphasis">{{comment.comment}}</p>
+                </div>
+                <span class="float-end pt-1 pb-3">{{comment.date}}</span>
+            </div>
+        {% endfor %}
+
+        <form action="{% url 'comment' listing.title %}" method="post" class="mt-4">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="text" name="comment" id="" placeholder="Comments" class="form-control form-control-color">
+            </div>
+            <input type="submit" value="Submit" class="btn btn-secondary">
+        </form>
+    </div>
+
+{% endblock %}

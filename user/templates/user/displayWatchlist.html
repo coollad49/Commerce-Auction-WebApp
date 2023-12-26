@@ -1,0 +1,24 @@
+{% extends "auctions/layout.html" %}
+
+{% load humanize %}
+{% block body %}
+
+    {% for item in items %}
+        <a href="{% url 'displaylisting' item.listing.title %}" style="text-decoration: none;">
+            <div class="container d-flex pt-5 ml-0 border border-dark-subtle" style="max-height: 15rem;">
+                <img src="{{item.listing.image}}" alt="" class="w-100 h-100" style="max-height: 15rem;">
+                <div class="pl-5">
+                    <h3 class="text-primary">{{item.listing.title}}</h3>
+                    <h5 class="text-success">Price: ${{ item.listing.start_bid|floatformat:2|intcomma }}</h5>
+                    <span class="text-secondary">Created {{item.listing.date}}</span>
+                    <div class="align-self-center pt-4">
+                       <a href="{% url 'removeItem' item.id %}" role="button" class="btn btn-outline-danger">Remove</a> 
+                    </div>
+                    
+                </div>
+                
+            </div>
+        </a>
+        
+    {% endfor %}
+{% endblock %}

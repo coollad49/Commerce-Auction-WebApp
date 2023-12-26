@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% load humanize %}
+{% block body %}
+    <h2 class="color text-center mb-5">Active Listings</h2>
+
+    {% for listing in open %}
+        <a href="{% url 'displaylisting' listing.title %}" style="text-decoration: none;">
+            <div class="container d-flex pt-5 ml-0 border border-dark-subtle mb-5">
+                <img src="{{listing.image}}" alt="" class="w-25" style="max-height: 15rem;">
+                <div class="pl-5">
+                    <h3 class="text-primary">{{listing.title}}</h3>
+                    <h5 class="text-success">Price: ${{ listing.start_bid|floatformat:2|intcomma }}</h5>
+                    <span class="text-secondary">Created {{listing.date}}</span>
+                </div>
+            </div>
+        </a>    
+    {% endfor %}
+
+    <h2 class="text-danger text-center my-5">Closed Listings</h2>
+
+    {% if any_closed %}
+        {% for listing in closed %}
+            <div class="container d-flex pt-5 ml-0 mb-5 disabled  bg-opacity-75 border border-danger border-start-0 rounded-end">
+                <img src="{{listing.image}}" alt="" class="w-25" style="max-height: 15rem;">
+                <div class="pl-5">
+                    <h3 class="text-primary">{{listing.title}}</h3>
+                    <h5 class="text-success">Price: ${{ listing.start_bid|floatformat:2|intcomma }}</h5>
+                    <span class="text-secondary">Created {{listing.date}}</span>
+                    <button class="btn btn-danger ml-5 disabled">Closed</button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

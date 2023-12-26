@@ -1,0 +1,22 @@
+{% extends "auctions/layout.html" %}
+
+{% load humanize %}
+{% block body %}
+    <h2 class="color text-center mb-5">{{category.name}}</h2>
+
+    {% for listing in listings %}
+        {% if listing.status == "OPEN" %}
+            <a href="{% url 'displaylisting' listing.title %}" style="text-decoration: none;">
+                <div class="container d-flex pt-5 ml-0 border border-dark-subtle mb-3">
+                    <img src="{{listing.image}}" alt="" class="w-25" style="max-height: 15rem;">
+                    <div class="pl-5">
+                        <h3 class="text-primary">{{listing.title}}</h3>
+                        <h5 class="text-success">Price: ${{ listing.start_bid|floatformat:2|intcomma }}</h5>
+                        <span class="text-secondary">Created {{listing.date}}</span>
+                    </div>
+                </div>
+            </a>
+        {% endif %}    
+    {% endfor %}
+
+{% endblock %}
